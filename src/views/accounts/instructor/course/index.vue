@@ -1,0 +1,117 @@
+<template>
+	<InstructorLayout>
+		<b-col xl="9">
+			<b-card no-body class="border bg-transparent rounded-3">
+				<b-card-header class="bg-transparent border-bottom">
+					<h3 class="mb-0">My Courses List</h3>
+				</b-card-header>
+
+				<b-card-body>
+					<b-row class="g-3 align-items-center justify-content-between mb-4">
+						<b-col md="8">
+							<b-form class="rounded position-relative">
+								<b-form-input class="pe-5 bg-transparent" type="search" placeholder="Search" />
+								<button
+									class="bg-transparent p-2 position-absolute top-50 end-0 translate-middle-y border-0 text-primary-hover text-reset"
+									type="submit">
+									<font-awesome-icon :icon="faSearch" class="fs-6" />
+								</button>
+							</b-form>
+						</b-col>
+
+						<b-col md="3">
+							<b-form>
+								<ChoicesSelect id="sort-by" class="border-0 z-index-9 bg-transparent">
+									<option value="">Sort by</option>
+									<option>Free</option>
+									<option>Newest</option>
+									<option>Most popular</option>
+									<option>Most Viewed</option>
+								</ChoicesSelect>
+							</b-form>
+						</b-col>
+					</b-row>
+
+					<div class="table-responsive border-0">
+						<table class="table table-dark-gray align-middle p-4 mb-0 table-hover">
+							<thead>
+								<tr>
+									<th scope="col" class="border-0 rounded-start">Course Title</th>
+									<th scope="col" class="border-0">Enrolled</th>
+									<th scope="col" class="border-0">Status</th>
+									<th scope="col" class="border-0">Price</th>
+									<th scope="col" class="border-0 rounded-end">Action</th>
+								</tr>
+							</thead>
+
+							<tbody>
+								<tr v-for="(item, idx) in courseList" :key="idx">
+									<td>
+										<div class="d-flex align-items-center">
+											<div class="w-60px">
+												<img :src="item.image" class="rounded" alt="">
+											</div>
+											<div class="mb-0 ms-2">
+												<h6><a href="#">{{ item.title }}</a></h6>
+												<div class="d-sm-flex">
+													<p class="h6 fw-light mb-0 small me-3">
+														<font-awesome-icon :icon="faTable" class="text-orange me-1" />
+														{{ item.lectures }}
+														lectures
+													</p>
+													<p class="h6 fw-light mb-0 small">
+														<font-awesome-icon :icon="faCheckCircle" class="text-success me-1" />
+														{{ item.completed }}
+														Completed
+													</p>
+												</div>
+											</div>
+										</div>
+									</td>
+									<td class="text-center text-sm-start">{{ item.student }}</td>
+									<td>
+										<div class="badge bg-opacity-10"
+											:class="item.status === 'live' ? 'bg-success text-success' : item.status === 'applied' ? 'bg-info text-info' : item.status === 'rejected' ? 'bg-danger text-danger' : 'bg-secondary text-secondary'" v-if="item.status">
+											{{ toSentenceCase(item.status) }}
+										</div>
+									</td>
+									<td>{{ currency }}{{ item.price }}</td>
+									<td>
+										<a href="#" class="btn btn-sm btn-success-soft btn-round me-1 mb-0">
+											<font-awesome-icon :icon="faEdit" class="fa-fw" />
+										</a>{{ ' ' }}
+										<b-button :variant="null" size="sm" class="btn-danger-soft btn-round mb-0">
+											<font-awesome-icon :icon="faTimes" class="fa-fw" />
+										</b-button>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					<div class="d-sm-flex justify-content-sm-between align-items-sm-center mt-4 mt-sm-3">
+						<p class="mb-0 text-center text-sm-start">Showing 1 to 8 of 20 entries</p>
+						<nav class="d-flex justify-content-center mb-0" aria-label="navigation">
+							<ul class="pagination pagination-sm pagination-primary-soft d-inline-block d-md-flex rounded mb-0">
+								<li class="page-item mb-0"><a class="page-link" href="#" tabindex="-1"> <font-awesome-icon :icon="faAngleLeft" /></a></li>
+								<li class="page-item mb-0"><a class="page-link" href="#">1</a></li>
+								<li class="page-item mb-0 active"><a class="page-link" href="#">2</a></li>
+								<li class="page-item mb-0"><a class="page-link" href="#">3</a></li>
+								<li class="page-item mb-0"><a class="page-link" href="#"> <font-awesome-icon :icon="faAngleRight" /></a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+				</b-card-body>
+			</b-card>
+		</b-col>
+	</InstructorLayout>
+</template>
+<script setup lang="ts">
+import InstructorLayout from '@/layouts/InstructorLayout.vue';
+import { currency } from '@/helpers/constants';
+import { toSentenceCase } from '@/helpers/change-casing';
+import { courseList } from '@/views/accounts/instructor/course/components/data';
+import { faSearch, faTable, faCheckCircle, faTimes, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { faEdit } from '@fortawesome/free-regular-svg-icons';
+</script>
